@@ -1,0 +1,23 @@
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Test and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local data
+data/*
+!data/.gitkeep
+
+# IDE
+.vscode/
