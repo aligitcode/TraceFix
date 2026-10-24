@@ -3,5 +3,10 @@
   {"script": "examples/buggy_shop/run_bug2.py", "error_type": "KeyError", "file": "discounts.py", "line": 4},
   {"script": "examples/buggy_shop/run_bug3.py", "error_type": "IndexError", "file": "inventory.py", "line": 2},
   {"script": "examples/buggy_shop/run_bug4.py", "error_type": "TypeError", "file": "totals.py", "line": 2},
-  {"script": "examples/buggy_shop/run_bug5.py", "error_type": "AttributeError", "file": "names.py", "line": 2}
+  {"script": "examples/buggy_shop/run_bug5.py", "error_type": "AttributeError", "file": "names.py", "line": 2},
+  {"script": "examples/buggy_shop/run_bug6.py", "error_type": "ValueError", "file": "quantity.py", "line": 2},
+  {"script": "examples/buggy_shop/run_bug7.py", "error_type": "FileNotFoundError", "file": "config.py", "line": 2},
+  {"script": "examples/buggy_shop/run_bug8.py", "error_type": "NameError", "file": "report.py", "line": 2},
+  {"script": "examples/buggy_shop/run_bug9.py", "error_type": "RecursionError", "file": "countdown.py", "line": 2},
+  {"script": "examples/buggy_shop/run_bug10.py", "error_type": "TypeError", "file": "run_bug10.py", "line": 5}
 ]
