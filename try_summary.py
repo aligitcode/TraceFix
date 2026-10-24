@@ -1,6 +1,6 @@
 import subprocess
 import sys
-
+from tracefix.main import summarize_error, parse_frames
 from tracefix.main import summarize_error
 
 result = subprocess.run(
@@ -13,3 +13,5 @@ print("Raw error text:")
 print(result.stderr)
 print("TraceFix summary:")
 print(summarize_error(result.stderr))
+print("Frames:")
+print(parse_frames(result.stderr))
