@@ -1,10 +1,14 @@
+import hashlib
 import json
 import os
 import time
+from pathlib import Path
 
 from dotenv import load_dotenv
 from google import genai
 from google.genai import errors, types
+
+CACHE_DIR = Path("results/cache")
 
 
 def build_prompt(summary: dict, frame: dict, context: list[dict]) -> str:
@@ -27,11 +31,17 @@ def build_prompt(summary: dict, frame: dict, context: list[dict]) -> str:
     )
 
 
-def ask_gemini(prompt: str, attempts: int = 4) -> dict:
-    """Send the prompt to Gemini, retrying on temporary errors (503, 429)."""
+def ask_gemini(prompt: str, attempts: int = 3) -> dict:
+    """Ask Gemini. Reuses saved answers and stops early on daily quota errors."""
     load_dotenv()
-    client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
     model = os.environ.get("GEMINI_MODEL", "gemini-3.8-flash")
+
+    key = hashlib.sha256((model + prompt).encode("utf-8")).hexdigest()[:16]
+    cache_file = CACHE_DIR / f"{key}.json"
+    if cache_file.exists():
+        return json.loads(cache_file.read_text(encoding="utf-8"))
+
+    client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
     for attempt in range(1, attempts + 1):
         try:
@@ -40,11 +50,20 @@ def ask_gemini(prompt: str, attempts: int = 4) -> dict:
                 contents=prompt,
                 config=types.GenerateContentConfig(response_mime_type="application/json"),
             )
-            return json.loads(response.text)
+            answer = json.loads(response.text)
+            CACHE_DIR.mkdir(parents=True, exist_ok=True)
+            cache_file.write_text(json.dumps(answer, indent=2), encoding="utf-8")
+            return answer
         except (errors.ServerError, errors.ClientError) as error:
+            text = str(error)
+            if "PerDay" in text:
+                raise RuntimeError(
+                    "Daily free-tier quota used up for this model. "
+                    "Try again tomorrow, or switch GEMINI_MODEL."
+                ) from error
             temporary = isinstance(error, errors.ServerError) or getattr(error, "code", None) == 429
             if not temporary or attempt == attempts:
                 raise
-            wait = 5 * attempt
+            wait = 10 * attempt
             print(f"Gemini is busy (attempt {attempt}/{attempts}). Retrying in {wait}s...")
             time.sleep(wait)
