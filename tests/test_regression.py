@@ -68,3 +68,24 @@ def test_ridge_stabilises_duplicate_features():
 def test_invalid_solver_raises():
     with pytest.raises(ValueError):
         LinearRegressionScratch(solver="magic")
+
+
+def near_duplicate_data():
+    rng = np.random.default_rng(0)
+    x1 = rng.normal(size=100)
+    y = 1 + 2 * x1 + rng.normal(scale=0.1, size=100)
+    x2 = x1 + 1e-9 * rng.normal(size=100)
+    return np.column_stack([x1, x2]), y
+
+
+def test_lstsq_default_rcond_blows_up_on_near_duplicates():
+    X, y = near_duplicate_data()
+    model = LinearRegressionScratch(solver="lstsq").fit(X, y)
+    assert np.max(np.abs(model.coef_)) > 1000
+
+
+def test_lstsq_with_larger_rcond_matches_sklearn_on_near_duplicates():
+    X, y = near_duplicate_data()
+    model = LinearRegressionScratch(solver="lstsq", rcond=1e-8).fit(X, y)
+    library = LinearRegression().fit(X, y)
+    assert np.allclose(model.coef_, library.coef_, atol=1e-3)

@@ -6,19 +6,22 @@ class LinearRegressionScratch:
 
     solver="normal": normal equation (X'X) beta = X'y. Fast, but fails or
         becomes unstable when features are collinear.
-    solver="lstsq": SVD-based least squares. Handles collinear features and
-        returns the minimum-norm solution.
+    solver="lstsq": SVD-based least squares. Singular values smaller than
+        rcond * (largest singular value) are treated as zero. With the numpy
+        default (rcond=None) near-duplicate features can still blow up; a
+        larger rcond such as 1e-8 drops those noise directions.
     alpha > 0: ridge penalty (the intercept is not penalised). This uses the
         normal equation with (X'X + alpha*I) and takes precedence over solver.
     """
 
-    def __init__(self, solver="normal", alpha=0.0):
+    def __init__(self, solver="normal", alpha=0.0, rcond=None):
         if solver not in ("normal", "lstsq"):
             raise ValueError("solver must be 'normal' or 'lstsq'")
         if alpha < 0:
             raise ValueError("alpha must be >= 0")
         self.solver = solver
         self.alpha = alpha
+        self.rcond = rcond
         self.intercept_ = None
         self.coef_ = None
 
@@ -38,7 +41,7 @@ class LinearRegressionScratch:
             penalty[0, 0] = 0.0
             beta = np.linalg.solve(X_b.T @ X_b + penalty, X_b.T @ y)
         elif self.solver == "lstsq":
-            beta, *_ = np.linalg.lstsq(X_b, y, rcond=None)
+            beta, *_ = np.linalg.lstsq(X_b, y, rcond=self.rcond)
         else:
             beta = np.linalg.solve(X_b.T @ X_b, X_b.T @ y)
 
