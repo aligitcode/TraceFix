@@ -1,4 +1,3 @@
-
 def summarize_error(error_text: str) -> dict[str, str]:
     """Extract a basic summary from a Python error message."""
     lines = [line.strip() for line in error_text.strip().splitlines() if line.strip()]
