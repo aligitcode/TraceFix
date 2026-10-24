@@ -1,4 +1,5 @@
 import re
+from pathlib import Path
 
 
 def summarize_error(error_text: str) -> dict[str, str]:
@@ -48,3 +49,16 @@ def parse_frames(error_text: str) -> list[dict[str, str]]:
             )
 
     return frames
+
+
+def get_code_context(file_path: str, line_number: int, radius: int = 3) -> list[dict]:
+    """Return the lines of code around a given line number."""
+    path = Path(file_path)
+    if not path.is_file():
+        return []
+
+    source_lines = path.read_text(encoding="utf-8").splitlines()
+    start = max(line_number - radius, 1)
+    end = min(line_number + radius, len(source_lines))
+
+    return [{"line": n, "text": source_lines[n - 1]} for n in range(start, end + 1)]

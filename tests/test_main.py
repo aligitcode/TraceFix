@@ -1,4 +1,4 @@
-from tracefix.main import summarize_error, parse_frames
+from tracefix.main import summarize_error, parse_frames, get_code_context
 
 
 def test_summarize_error_basic():
@@ -26,3 +26,15 @@ def test_parse_frames():
     assert frames[-1]["file"] == "cart.py"
     assert frames[-1]["line"] == "2"
     assert frames[-1]["function"] == "average_price"
+
+
+def test_get_code_context(tmp_path):
+    file = tmp_path / "sample.py"
+    file.write_text("a\nb\nc\nd\ne\n", encoding="utf-8")
+    context = get_code_context(str(file), 3, radius=1)
+    assert [item["line"] for item in context] == [2, 3, 4]
+    assert context[1]["text"] == "c"
+
+
+def test_get_code_context_missing_file():
+    assert get_code_context("nope.py", 1) == []
