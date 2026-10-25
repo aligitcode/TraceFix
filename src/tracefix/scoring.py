@@ -8,6 +8,9 @@ def score_answer(answer: dict, verification: dict, case: dict, failing_file: str
     the line where the defect actually is. If the evidence is not sufficient,
     the correct behaviour is to answer with low or inconclusive confidence.
 
+    A plain number means a line of the failing file; "file.py:line" is a
+    file-qualified citation.
+
     This scores the cited lines and the confidence only. It does not judge
     whether the written explanation is right; that needs a manual review.
     """
@@ -18,9 +21,10 @@ def score_answer(answer: dict, verification: dict, case: dict, failing_file: str
         cited = []
     confidence = answer.get("confidence")
 
-    cites_cause = (
-        Path(failing_file).name == case["cause_file"]
-        and case["cause_line"] in cited
+    cause_ref = f"{case['cause_file']}:{case['cause_line']}"
+    cited_strings = [c.strip() for c in cited if isinstance(c, str)]
+    cites_cause = cause_ref in cited_strings or (
+        Path(failing_file).name == case["cause_file"] and case["cause_line"] in cited
     )
 
     if sufficient:

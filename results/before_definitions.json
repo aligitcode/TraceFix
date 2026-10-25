@@ -1,0 +1,140 @@
+{
+  "meta": {
+    "commit": "12fca21",
+    "uncommitted_changes": true,
+    "model": "gemini-3.8-flash",
+    "llm": true
+  },
+  "rows": [
+    {
+      "bug": "run_bug1.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The `prices` sequence is empty, causing `len(prices)` to evaluate to 0 and triggering a ZeroDivisionError on division."
+    },
+    {
+      "bug": "run_bug2.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The discount code 'SAVE50' was looked up in the DISCOUNTS dictionary via DISCOUNTS[code], but 'SAVE50' is not a defined key in DISCOUNTS."
+    },
+    {
+      "bug": "run_bug3.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The list or sequence 'items' passed to first_item is empty, causing an IndexError when attempting to access index 0."
+    },
+    {
+      "bug": "run_bug4.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The shipping argument is passed as a string instead of a numeric type, leading to a TypeError when adding it to the integer result of sum(prices)."
+    },
+    {
+      "bug": "run_bug5.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The parameter 'name' is None, which causes an AttributeError when '.strip()' is called on it."
+    },
+    {
+      "bug": "run_bug6.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The function attempts to convert the string 'three' to an integer using int(text), but int() with base 10 only accepts numeric digit strings, raising a ValueError."
+    },
+    {
+      "bug": "run_bug7.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The function load_config attempts to open the file specified by the path argument ('missing_settings.json'), but the file does not exist at that location."
+    },
+    {
+      "bug": "run_bug8.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The variable 'tax' is referenced in the return statement without being defined or passed as a parameter to the function."
+    },
+    {
+      "bug": "run_bug9.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The countdown function lacks a base case to terminate recursion, resulting in unconditional recursive calls until the maximum recursion depth is exceeded."
+    },
+    {
+      "bug": "run_bug10.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": false,
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": false,
+      "correct_behavior": false,
+      "false_confidence": true,
+      "likely_cause": "`find_user(users, \"zed\")` returned `None` because \"zed\" was not found in `users`, leading to a subscript operation on `None` (`result[\"name\"]`)."
+    }
+  ]
+}

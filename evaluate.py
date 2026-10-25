@@ -8,7 +8,12 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from tracefix.investigator import ask_gemini, build_prompt
-from tracefix.main import get_code_context, parse_frames, summarize_error
+from tracefix.main import (
+    find_called_definitions,
+    get_code_context,
+    parse_frames,
+    summarize_error,
+)
 from tracefix.scoring import score_answer
 from tracefix.verifier import verify_report
 
@@ -50,11 +55,23 @@ for case in cases:
 
     if use_llm:
         context = get_code_context(failing["file"], int(failing["line"]))
+        failing_path = Path(failing["file"]).resolve()
+        definitions = [
+            d
+            for d in find_called_definitions(context, str(failing_path.parent))
+            if Path(d["file"]).resolve() != failing_path
+        ]
+        row["extra_functions"] = [d["name"] for d in definitions]
         try:
-            answer = ask_gemini(build_prompt(summary, failing, context))
-            verification = verify_report(answer, context)
+            answer = ask_gemini(
+                build_prompt(summary, failing, context, definitions or None)
+            )
+            verification = verify_report(
+                answer, context, definitions or None, failing["file"]
+            )
             row.update(score_answer(answer, verification, case, failing["file"]))
             row["likely_cause"] = answer.get("likely_cause")
+            row["evidence_lines"] = answer.get("evidence_lines")
         except Exception as error:
             row["llm_error"] = str(error)[:200]
         time.sleep(4)
@@ -67,7 +84,7 @@ print(
     f"model={meta['model']}  llm={meta['llm']}"
 )
 for row in rows:
-    print({k: v for k, v in row.items() if k != "likely_cause"})
+    print({k: v for k, v in row.items() if k not in ("likely_cause", "evidence_lines")})
 
 parsing_ok = sum(1 for r in rows if r["error_ok"] and r["file_ok"] and r["line_ok"])
 print()

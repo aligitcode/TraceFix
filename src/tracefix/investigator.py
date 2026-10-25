@@ -11,9 +11,27 @@ from google.genai import errors, types
 CACHE_DIR = Path("results/cache")
 
 
-def build_prompt(summary: dict, frame: dict, context: list[dict]) -> str:
+def build_prompt(summary: dict, frame: dict, context: list[dict], definitions: list[dict] | None = None) -> str:
     """Turn TraceFix evidence into a prompt for Gemini."""
     code = "\n".join(f"{item['line']}: {item['text']}" for item in context)
+
+    extra = ""
+    citing = '"evidence_lines" (list of line numbers you relied on), '
+    if definitions:
+        blocks = []
+        for d in definitions:
+            name = Path(d["file"]).name
+            blocks.append("\n".join(f"{name}:{l['line']}: {l['text']}" for l in d["lines"]))
+        extra = (
+            "Code of functions called near the failure (file:line: code):\n"
+            + "\n".join(blocks)
+            + "\n\n"
+        )
+        citing = (
+            '"evidence_lines" (list; use plain numbers for lines of the failing file '
+            'and "file.py:line" strings for lines of the functions above), '
+        )
+
     return (
         "You are a careful software debugging assistant.\n"
         "Use ONLY the evidence below. If it is not enough, say so.\n\n"
@@ -23,9 +41,10 @@ def build_prompt(summary: dict, frame: dict, context: list[dict]) -> str:
         f"Failing line: {frame['line']} in function {frame['function']}\n\n"
         "Code around the failure (line number: code):\n"
         f"{code}\n\n"
+        f"{extra}"
         "Reply as JSON with exactly these keys: "
         '"likely_cause" (string), '
-        '"evidence_lines" (list of line numbers you relied on), '
+        f"{citing}"
         '"confidence" (one of "high", "medium", "low", "inconclusive"), '
         '"suggested_fix" (string).'
     )
