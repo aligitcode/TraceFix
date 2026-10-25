@@ -25,3 +25,4 @@ data/*
 # Generated results
 results/cache/
 results/latest.json
+results/run_output.txt
