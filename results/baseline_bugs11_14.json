@@ -1,0 +1,268 @@
+{
+  "meta": {
+    "commit": "3193912",
+    "uncommitted_changes": false,
+    "model": "gemini-3.8-flash",
+    "llm": true
+  },
+  "rows": [
+    {
+      "bug": "run_bug1.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The `prices` sequence is empty, causing `len(prices)` to evaluate to 0 and triggering a ZeroDivisionError on division.",
+      "evidence_lines": [
+        2
+      ]
+    },
+    {
+      "bug": "run_bug2.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The discount code 'SAVE50' was looked up in the DISCOUNTS dictionary via DISCOUNTS[code], but 'SAVE50' is not a defined key in DISCOUNTS.",
+      "evidence_lines": [
+        1,
+        4
+      ]
+    },
+    {
+      "bug": "run_bug3.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The list or sequence 'items' passed to first_item is empty, causing an IndexError when attempting to access index 0.",
+      "evidence_lines": [
+        2
+      ]
+    },
+    {
+      "bug": "run_bug4.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The shipping argument is passed as a string instead of a numeric type, leading to a TypeError when adding it to the integer result of sum(prices).",
+      "evidence_lines": [
+        1,
+        2
+      ]
+    },
+    {
+      "bug": "run_bug5.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The parameter 'name' is None, which causes an AttributeError when '.strip()' is called on it.",
+      "evidence_lines": [
+        1,
+        2
+      ]
+    },
+    {
+      "bug": "run_bug6.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The function attempts to convert the string 'three' to an integer using int(text), but int() with base 10 only accepts numeric digit strings, raising a ValueError.",
+      "evidence_lines": [
+        1,
+        2
+      ]
+    },
+    {
+      "bug": "run_bug7.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The function load_config attempts to open the file specified by the path argument ('missing_settings.json'), but the file does not exist at that location.",
+      "evidence_lines": [
+        2
+      ]
+    },
+    {
+      "bug": "run_bug8.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The variable 'tax' is referenced in the return statement without being defined or passed as a parameter to the function.",
+      "evidence_lines": [
+        1,
+        2
+      ]
+    },
+    {
+      "bug": "run_bug9.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The countdown function lacks a base case to terminate recursion, resulting in unconditional recursive calls until the maximum recursion depth is exceeded.",
+      "evidence_lines": [
+        1,
+        2
+      ]
+    },
+    {
+      "bug": "run_bug10.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [
+        "find_user"
+      ],
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "find_user returns None because 'zed' is not in users, and line 5 attempts to subscript result when it is None.",
+      "evidence_lines": [
+        3,
+        4,
+        5,
+        "lookup.py:2",
+        "lookup.py:3",
+        "lookup.py:4"
+      ]
+    },
+    {
+      "bug": "run_bug11.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": false,
+      "correct_behavior": false,
+      "false_confidence": true,
+      "likely_cause": "The function 'split_cost' was called with 'people' set to 0, causing a division by zero error on line 2.",
+      "evidence_lines": [
+        1,
+        2
+      ]
+    },
+    {
+      "bug": "run_bug12.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": false,
+      "correct_behavior": false,
+      "false_confidence": true,
+      "likely_cause": "DEFAULT_TAX is a string, which causes a TypeError when attempting to add integer 1 to it in the expression (1 + DEFAULT_TAX).",
+      "evidence_lines": [
+        6
+      ]
+    },
+    {
+      "bug": "run_bug13.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": false,
+      "correct_behavior": false,
+      "false_confidence": true,
+      "likely_cause": "The dictionary passed as 'user' does not contain the key 'name', causing a KeyError when accessed.",
+      "evidence_lines": [
+        1,
+        2
+      ]
+    },
+    {
+      "bug": "run_bug14.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [
+        "to_number"
+      ],
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "`to_number` only returns a value if `value` is an instance of `str`. If `item['price']` is a non-string (such as an `int` or `float`), `to_number` implicitly returns `None`, leading to a `TypeError` when adding to `total`.",
+      "evidence_lines": [
+        7,
+        "parse14.py:1",
+        "parse14.py:2",
+        "parse14.py:3"
+      ]
+    }
+  ]
+}
