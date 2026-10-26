@@ -8,6 +8,9 @@
   {"script": "examples/buggy_shop/run_bug7.py", "error_type": "FileNotFoundError", "file": "config.py", "line": 2, "cause_file": "config.py", "cause_line": 2, "evidence_sufficient": true},
   {"script": "examples/buggy_shop/run_bug8.py", "error_type": "NameError", "file": "report.py", "line": 2, "cause_file": "report.py", "cause_line": 2, "evidence_sufficient": true},
   {"script": "examples/buggy_shop/run_bug9.py", "error_type": "RecursionError", "file": "countdown.py", "line": 2, "cause_file": "countdown.py", "cause_line": 2, "evidence_sufficient": true},
-  {"script": "examples/buggy_shop/run_bug10.py", "error_type": "TypeError", "file": "run_bug10.py", "line": 5, "cause_file": "lookup.py", "cause_line": 2, "evidence_sufficient": true}
+  {"script": "examples/buggy_shop/run_bug10.py", "error_type": "TypeError", "file": "run_bug10.py", "line": 5, "cause_file": "lookup.py", "cause_line": 2, "evidence_sufficient": true},
+  {"script": "examples/buggy_shop/run_bug11.py", "error_type": "ZeroDivisionError", "file": "ratelib11.py", "line": 2, "cause_file": "orders11.py", "cause_line": 5, "evidence_sufficient": true},
+  {"script": "examples/buggy_shop/run_bug12.py", "error_type": "TypeError", "file": "report12.py", "line": 6, "cause_file": "settings12.py", "cause_line": 1, "evidence_sufficient": true},
+  {"script": "examples/buggy_shop/run_bug13.py", "error_type": "KeyError", "file": "fmt13.py", "line": 2, "cause_file": "run_bug13.py", "cause_line": 3, "evidence_sufficient": true},
+  {"script": "examples/buggy_shop/run_bug14.py", "error_type": "TypeError", "file": "cart14.py", "line": 7, "cause_file": "parse14.py", "cause_line": 2, "evidence_sufficient": true}
 ]
-

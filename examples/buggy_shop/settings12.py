@@ -1,0 +1,1 @@
+DEFAULT_TAX = "0.2"
