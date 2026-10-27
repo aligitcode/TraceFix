@@ -10,6 +10,8 @@ from dotenv import load_dotenv
 from tracefix.investigator import ask_gemini, build_prompt
 from tracefix.main import (
     find_called_definitions,
+    find_imported_constants,
+    get_frame_contexts,
     get_code_context,
     parse_frames,
     summarize_error,
@@ -62,6 +64,10 @@ for case in cases:
             if Path(d["file"]).resolve() != failing_path
         ]
         row["extra_functions"] = [d["name"] for d in definitions]
+        definitions = definitions + [
+            {"file": f["file"], "lines": f["lines"]} for f in get_frame_contexts(frames)
+        ] + find_imported_constants(failing["file"])
+        row["extra_evidence_files"] = sorted({Path(d["file"]).name for d in definitions})
         try:
             answer = ask_gemini(
                 build_prompt(summary, failing, context, definitions or None)

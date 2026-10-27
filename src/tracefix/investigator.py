@@ -23,13 +23,13 @@ def build_prompt(summary: dict, frame: dict, context: list[dict], definitions: l
             name = Path(d["file"]).name
             blocks.append("\n".join(f"{name}:{l['line']}: {l['text']}" for l in d["lines"]))
         extra = (
-            "Code of functions called near the failure (file:line: code):\n"
+            "Additional code evidence: functions called near the failure, other traceback frames, imported constants (file:line: code):\n"
             + "\n".join(blocks)
             + "\n\n"
         )
         citing = (
             '"evidence_lines" (list; use plain numbers for lines of the failing file '
-            'and "file.py:line" strings for lines of the functions above), '
+            'and "file.py:line" strings for lines of the additional evidence above), '
         )
 
     return (
@@ -60,7 +60,7 @@ def ask_gemini(prompt: str, attempts: int = 3) -> dict:
     if cache_file.exists():
         return json.loads(cache_file.read_text(encoding="utf-8"))
 
-    client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+    client = genai.Client(api_key=os.environ["GEMINI_API_KEY"], http_options=types.HttpOptions(timeout=20000, retry_options=types.HttpRetryOptions(attempts=1)))
 
     for attempt in range(1, attempts + 1):
         try:
@@ -86,3 +86,4 @@ def ask_gemini(prompt: str, attempts: int = 3) -> dict:
             wait = 10 * attempt
             print(f"Gemini is busy (attempt {attempt}/{attempts}). Retrying in {wait}s...")
             time.sleep(wait)
+
