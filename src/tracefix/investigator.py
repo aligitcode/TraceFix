@@ -9,6 +9,7 @@ from google import genai
 from google.genai import errors, types
 
 CACHE_DIR = Path("results/cache")
+LAST_CALL = {"cached": None}
 
 
 def build_prompt(summary: dict, frame: dict, context: list[dict], definitions: list[dict] | None = None) -> str:
@@ -58,7 +59,9 @@ def ask_gemini(prompt: str, attempts: int = 3) -> dict:
     key = hashlib.sha256((model + prompt).encode("utf-8")).hexdigest()[:16]
     cache_file = CACHE_DIR / f"{key}.json"
     if cache_file.exists():
+        LAST_CALL["cached"] = True
         return json.loads(cache_file.read_text(encoding="utf-8"))
+    LAST_CALL["cached"] = False
 
     client = genai.Client(api_key=os.environ["GEMINI_API_KEY"], http_options=types.HttpOptions(timeout=20000, retry_options=types.HttpRetryOptions(attempts=1)))
 

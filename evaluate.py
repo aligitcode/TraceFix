@@ -7,7 +7,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from tracefix.investigator import ask_gemini, build_prompt
+from tracefix.investigator import LAST_CALL, ask_gemini, build_prompt
 from tracefix.main import (
     find_called_definitions,
     find_imported_constants,
@@ -36,6 +36,9 @@ meta = {
 }
 
 rows = []
+api_calls = 0
+cache_hits = 0
+quota_hit = False
 for case in cases:
     run = subprocess.run(
         [sys.executable, case["script"]], capture_output=True, text=True
@@ -69,9 +72,18 @@ for case in cases:
         ] + find_imported_constants(failing["file"])
         row["extra_evidence_files"] = sorted({Path(d["file"]).name for d in definitions})
         try:
+            if quota_hit:
+                row["llm_error"] = "skipped: daily quota already hit in this run"
+                rows.append(row)
+                continue
             answer = ask_gemini(
-                build_prompt(summary, failing, context, definitions or None)
+                build_prompt(summary, failing, context, definitions or None),
+                attempts=1,
             )
+            if LAST_CALL["cached"]:
+                cache_hits += 1
+            else:
+                api_calls += 1
             verification = verify_report(
                 answer, context, definitions or None, failing["file"]
             )
@@ -80,7 +92,11 @@ for case in cases:
             row["evidence_lines"] = answer.get("evidence_lines")
         except Exception as error:
             row["llm_error"] = str(error)[:200]
-        time.sleep(4)
+            api_calls += 1
+            if "quota" in str(error).lower():
+                quota_hit = True
+        if not LAST_CALL["cached"]:
+            time.sleep(4)
 
     rows.append(row)
 
@@ -104,6 +120,7 @@ if use_llm:
     easy = [r for r in answered if r.get("evidence_sufficient")]
     hard = [r for r in answered if not r.get("evidence_sufficient")]
     print(f"Gemini calls that failed (not scored): {failed}/{total}")
+    print(f"API requests made: {api_calls}   answers from cache: {cache_hits}")
     print(f"Correct behavior: {correct}/{len(answered)}")
     print(f"  cases with enough evidence: {sum(1 for r in easy if r.get('correct_behavior'))}/{len(easy)}")
     print(f"  cases that should be low or inconclusive: {sum(1 for r in hard if r.get('correct_behavior'))}/{len(hard)}")
