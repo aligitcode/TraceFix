@@ -24,5 +24,11 @@ data/*
 
 # Generated results
 results/cache/
-results/latest.json
+results/latest*.json
 results/run_output.txt
+
+# Copies made by apply_runner_fix.py
+backup_before_fix/
+
+# Update bundles
+tracefix_update*.zip

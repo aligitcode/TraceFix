@@ -1,6 +1,20 @@
 from pathlib import Path
 
 
+def evidence_covers(case: dict, failing_file: str, context: list[dict], definitions: list[dict] | None) -> bool:
+    """True when the evidence sent to the model contains the line where the defect is.
+
+    This is an offline check of the retrieval step. It needs no Gemini request.
+    """
+    cause_file, cause_line = case["cause_file"], case["cause_line"]
+    if Path(failing_file).name == cause_file and any(item["line"] == cause_line for item in context):
+        return True
+    for d in definitions or []:
+        if Path(d["file"]).name == cause_file and any(l["line"] == cause_line for l in d["lines"]):
+            return True
+    return False
+
+
 def score_answer(answer: dict, verification: dict, case: dict, failing_file: str) -> dict:
     """Score one Gemini answer against the answer key.
 

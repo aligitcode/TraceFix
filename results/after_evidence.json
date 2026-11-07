@@ -1,0 +1,421 @@
+{
+  "meta": {
+    "commit": "881897f",
+    "uncommitted_changes": true,
+    "model": "gemini-3.8-flash",
+    "llm": true,
+    "mode": "tracefix",
+    "cases": "examples/expected.json",
+    "requests_sent": 13,
+    "answers_from_cache": 6,
+    "complete": true,
+    "stop_reason": null
+  },
+  "rows": [
+    {
+      "bug": "run_bug1.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "extra_evidence_files": [
+        "run_bug1.py"
+      ],
+      "cause_in_evidence": true,
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The function average_price is called with an empty list, causing len(prices) to be 0, which results in a division by zero.",
+      "evidence_lines": [
+        2,
+        "run_bug1.py:3"
+      ],
+      "api_requests": 1,
+      "attempts": [
+        {
+          "result": "ok",
+          "seconds": 4.1
+        }
+      ]
+    },
+    {
+      "bug": "run_bug2.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "extra_evidence_files": [
+        "run_bug2.py"
+      ],
+      "cause_in_evidence": true,
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The discount code 'SAVE50' is accessed in the DISCOUNTS dictionary via DISCOUNTS[code], but 'SAVE50' is not a defined key in DISCOUNTS.",
+      "evidence_lines": [
+        1,
+        4,
+        "run_bug2.py:3"
+      ]
+    },
+    {
+      "bug": "run_bug3.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "extra_evidence_files": [
+        "run_bug3.py"
+      ],
+      "cause_in_evidence": true,
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The function first_item attempts to access index 0 of the provided list, but an empty list was passed as an argument, causing an IndexError.",
+      "evidence_lines": [
+        2,
+        "run_bug3.py:3"
+      ]
+    },
+    {
+      "bug": "run_bug4.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "extra_evidence_files": [
+        "run_bug4.py"
+      ],
+      "cause_in_evidence": true,
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The shipping parameter is passed as a string ('\"5\"') instead of a numeric type, causing a TypeError when added to the integer sum of prices.",
+      "evidence_lines": [
+        2,
+        "run_bug4.py:3"
+      ],
+      "api_requests": 1,
+      "attempts": [
+        {
+          "result": "ok",
+          "seconds": 27.7
+        }
+      ]
+    },
+    {
+      "bug": "run_bug5.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "extra_evidence_files": [
+        "run_bug5.py"
+      ],
+      "cause_in_evidence": true,
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The function clean_name is called with None as the argument, causing an AttributeError when calling .strip() on a NoneType object.",
+      "evidence_lines": [
+        2,
+        "run_bug5.py:3"
+      ]
+    },
+    {
+      "bug": "run_bug6.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "extra_evidence_files": [
+        "run_bug6.py"
+      ],
+      "cause_in_evidence": true,
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The function `int(text)` expects a string representing an integer in base 10 (such as '3'), but receives the word 'three', raising a ValueError.",
+      "evidence_lines": [
+        2,
+        "run_bug6.py:3"
+      ]
+    },
+    {
+      "bug": "run_bug7.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "extra_evidence_files": [
+        "run_bug7.py"
+      ],
+      "cause_in_evidence": true,
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The function load_config attempts to open 'missing_settings.json' passed as an argument, but the file does not exist at that path, raising FileNotFoundError.",
+      "evidence_lines": [
+        2,
+        "run_bug7.py:3"
+      ],
+      "api_requests": 2,
+      "attempts": [
+        {
+          "result": "503 UNAVAILABLE [transient]",
+          "seconds": 4.5
+        },
+        {
+          "result": "ok",
+          "seconds": 8.4
+        }
+      ]
+    },
+    {
+      "bug": "run_bug8.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "extra_evidence_files": [
+        "run_bug8.py"
+      ],
+      "cause_in_evidence": true,
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The variable 'tax' is referenced in 'total_with_tax' on line 2 but is never defined in the function scope or module scope.",
+      "evidence_lines": [
+        1,
+        2
+      ],
+      "api_requests": 1,
+      "attempts": [
+        {
+          "result": "ok",
+          "seconds": 116.8
+        }
+      ]
+    },
+    {
+      "bug": "run_bug9.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "extra_evidence_files": [
+        "run_bug9.py"
+      ],
+      "cause_in_evidence": true,
+      "api_requests": 3,
+      "attempts": [
+        {
+          "result": "503 UNAVAILABLE [transient]",
+          "seconds": 4.9
+        },
+        {
+          "result": "503 UNAVAILABLE [transient]",
+          "seconds": 5.2
+        },
+        {
+          "result": "ok",
+          "seconds": 3.2
+        }
+      ],
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The function `countdown` lacks a base case to stop the recursive calls, causing infinite recursion until the maximum recursion depth is exceeded.",
+      "evidence_lines": [
+        1,
+        2,
+        "run_bug9.py:3"
+      ]
+    },
+    {
+      "bug": "run_bug10.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [
+        "find_user"
+      ],
+      "extra_evidence_files": [
+        "lookup.py"
+      ],
+      "cause_in_evidence": true,
+      "api_requests": 2,
+      "attempts": [
+        {
+          "result": "503 UNAVAILABLE [transient]",
+          "seconds": 2.2
+        },
+        {
+          "result": "ok",
+          "seconds": 7.1
+        }
+      ],
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The function find_user returns None because 'zed' is not present in the users list, causing result[\"name\"] to raise a TypeError when attempting to subscript None.",
+      "evidence_lines": [
+        3,
+        4,
+        5,
+        "lookup.py:2",
+        "lookup.py:3",
+        "lookup.py:4"
+      ]
+    },
+    {
+      "bug": "run_bug11.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "extra_evidence_files": [
+        "orders11.py",
+        "run_bug11.py"
+      ],
+      "cause_in_evidence": true,
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "In orders11.py, 'people' is calculated as len(order['names']) - 1. When the order contains only 1 name (['ali']), 'people' evaluates to 0, causing a division by zero when passed to split_cost.",
+      "evidence_lines": [
+        2,
+        "run_bug11.py:3",
+        "orders11.py:5",
+        "orders11.py:6"
+      ],
+      "api_requests": 1,
+      "attempts": [
+        {
+          "result": "ok",
+          "seconds": 79.7
+        }
+      ]
+    },
+    {
+      "bug": "run_bug12.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "extra_evidence_files": [
+        "run_bug12.py",
+        "settings12.py"
+      ],
+      "cause_in_evidence": true,
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "DEFAULT_TAX is defined as a string (\"0.2\"), causing a TypeError when attempting to add it to the integer 1 in the expression (1 + DEFAULT_TAX).",
+      "evidence_lines": [
+        6,
+        "settings12.py:1"
+      ]
+    },
+    {
+      "bug": "run_bug13.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [],
+      "extra_evidence_files": [
+        "run_bug13.py",
+        "users13.py"
+      ],
+      "cause_in_evidence": true,
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "The dictionary passed in run_bug13.py has a typo in the key ('nam' instead of 'name'), causing a KeyError when shout() tries to access user['name'].",
+      "evidence_lines": [
+        2,
+        "run_bug13.py:3",
+        "users13.py:5",
+        "users13.py:6"
+      ]
+    },
+    {
+      "bug": "run_bug14.py",
+      "error_ok": true,
+      "file_ok": true,
+      "line_ok": true,
+      "evidence_sufficient": true,
+      "extra_functions": [
+        "to_number"
+      ],
+      "extra_evidence_files": [
+        "parse14.py",
+        "run_bug14.py"
+      ],
+      "cause_in_evidence": true,
+      "status": "supported",
+      "confidence": "high",
+      "cites_cause_line": true,
+      "correct_behavior": true,
+      "false_confidence": false,
+      "likely_cause": "`to_number` only handles inputs that are instances of `str`, implicitly returning `None` when passed numeric values such as `int`.",
+      "evidence_lines": [
+        7,
+        "parse14.py:1",
+        "parse14.py:2",
+        "parse14.py:3",
+        "run_bug14.py:3"
+      ],
+      "api_requests": 2,
+      "attempts": [
+        {
+          "result": "504 DEADLINE_EXCEEDED [transient]",
+          "seconds": 118.2
+        },
+        {
+          "result": "ok",
+          "seconds": 69.8
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+[
+  {"script": "examples/heldout/run_bug15.py", "error_type": "ValueError", "file": "run_bug15.py", "line": 5, "cause_file": "cart15.py", "cause_line": 1, "evidence_sufficient": false},
+  {"script": "examples/heldout/run_bug16.py", "error_type": "ValueError", "file": "stats16.py", "line": 11, "cause_file": "run_bug16.py", "cause_line": 3, "evidence_sufficient": true},
+  {"script": "examples/heldout/run_bug17.py", "error_type": "TypeError", "file": "run_bug17.py", "line": 5, "cause_file": "helper17.py", "cause_line": 2, "evidence_sufficient": true},
+  {"script": "examples/heldout/run_bug18.py", "error_type": "TypeError", "file": "run_bug18.py", "line": 3, "cause_file": "greeter18.py", "cause_line": 2, "evidence_sufficient": true},
+  {"script": "examples/heldout/run_bug19.py", "error_type": "ImportError", "file": "taxes19.py", "line": 1, "cause_file": "taxes19.py", "cause_line": 1, "evidence_sufficient": true},
+  {"script": "examples/heldout/run_bug20.py", "error_type": "TypeError", "file": "sorter20.py", "line": 2, "cause_file": "ids20.py", "cause_line": 4, "evidence_sufficient": false}
+]
