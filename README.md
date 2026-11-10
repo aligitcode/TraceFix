@@ -25,8 +25,7 @@ written from scratch with NumPy and compared with scikit-learn. The regression m
 cd TraceFix
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-pip install pytest google-genai python-dotenv numpy scikit-learn
-$env:PYTHONPATH = "src"        # needed in every new terminal, or you get "No module named tracefix"
+python -m pip install -e ".[dev]"
 ```
 
 Put your key in a file named `.env` (it is git-ignored; never paste it into a chat or commit it):
