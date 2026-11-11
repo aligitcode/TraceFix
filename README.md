@@ -1,5 +1,7 @@
 # TraceFix
 
+By [aligitcode](https://github.com/aligitcode) · MIT license
+
 TraceFix investigates a failing Python program. It parses the traceback, finds the failing
 file, line and function, collects code evidence around the failure, asks Gemini for the likely
 cause, then **checks the answer against the evidence** and scores it against a known cause.
