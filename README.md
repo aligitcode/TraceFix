@@ -18,6 +18,8 @@ written from scratch with NumPy and compared with scikit-learn. The regression m
   the explanation is right, so every `likely_cause` must be read by a person.
 - Similar tools already exist (see `docs/related_work.md`). Nothing here is claimed to be new.
 - No claim of business value is made.
+- TraceFix reads the traceback and the source code only. It has no runtime values (variable contents),
+  no sandbox, and it never runs or verifies a suggested fix.
 
 ## Install (Windows PowerShell)
 
@@ -116,10 +118,14 @@ src/tracefix/   main.py, investigator.py, baseline.py, verifier.py, scoring.py,
 examples/       buggy_shop/ (bugs 1-14), heldout/ (bugs 15-20), expected*.json (answer keys)
 tests/          unit tests, fake Gemini server tests, answer-key checks
 docs/           derivation.md, gemini_quota_notes.md, related_work.md, report.md, study_guide.md
+scripts/        small helpers: show_prompt.py, show_extra.py, try_summary.py
+experiments/    regression/ one-off experiments behind docs/derivation.md
 results/        saved results (generated files are git-ignored)
 ```
 
 ## Security
 
 Running a failing script **executes it**. Only run benchmark cases you trust. Free-tier prompts may
-be used by Google, so only send practice bugs and public code to Gemini.
+be used by Google, so only send practice bugs and public code to Gemini. The failing script also runs with
+your environment variables, which include `GEMINI_API_KEY`, so a malicious script could read the key.
+Use a key you can revoke, and only run code you trust.
