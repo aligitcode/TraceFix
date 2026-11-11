@@ -76,18 +76,31 @@ so the extra evidence can be measured instead of assumed.
 
 ## Results so far
 
-Measured on `gemini-3.8-flash`; saved files are in `results/`.
+Measured on `gemini-3.8-flash`; saved files are in `results/`. Every number below comes from a
+saved file or a quoted terminal output.
 
-| Run | Code | Correct behaviour | False confidence |
-|---|---|---|---|
-| `before_definitions.json` (bugs 1-10) | 12fca21, before called-function retrieval | 9 / 10 | 1 (bug 10) |
-| `baseline_bugs11_14.json` (bugs 1-14) | 3193912, before frame and constant evidence (file committed in 280f1aa) | 11 / 14 | 3 (bugs 11, 12, 13) |
-| After frame and constant evidence (current code) | 939f647 | **not complete yet**: 6 of 14 bugs answered, all 6 correct | pending |
-| Plain-chatbot baseline | `--baseline` | pending | pending |
-| Fresh bugs 15-20 | `--cases examples/expected_heldout.json` | pending | pending |
+| Run | Code | Answered | Correct behaviour | False confidence |
+|---|---|---|---|---|
+| `before_definitions.json` (bugs 1-10) | 12fca21, before called-function retrieval | 10 / 10 | 9 / 10 | 1 (bug 10) |
+| `baseline_bugs11_14.json` (bugs 1-14) | 3193912, before frame and constant evidence | 14 / 14 | 11 / 14 | 3 (bugs 11, 12, 13) |
+| `after_evidence.json` (bugs 1-14) | run just before the final commit f001548 (the file records 881897f with uncommitted changes); the prompt is locked by a test | 14 / 14 | 14 / 14 | 0 |
+| Plain-chatbot baseline (`--baseline`) | f001548 | 2 / 14 (bugs 1 and 2) | not a result | not a result |
+| Fresh bugs 15-20 | f001548 | not run | not run | not run |
 
-"Pending" means the Gemini runs are not finished, not that they failed. Do not read the 6 / 6
-as a result: it is 6 easy bugs out of 14, and bugs 10 and 11 are the ones that matter.
+How to read this table:
+
+- `after_evidence.json` is **repair evidence, not a test**. Bugs 10-13 and their fixes were developed
+  on the same cases. Six of its 14 answers came from earlier cached runs (13 requests were sent: 8
+  answered, 5 failed with 503/504), so it was not produced by one clean invocation.
+- "Correct behaviour" means the cited lines include the known cause line. The scorer is lenient and
+  does not judge the written explanation, so read each `likely_cause` yourself
+  (`python show_causes.py`).
+- The plain-chatbot baseline could not be completed: over several days Gemini answered most requests
+  with 503/504 overload errors (2 of 14 answered). **No claim is made about TraceFix versus a plain
+  chatbot.** The fresh bugs have not been run either.
+- Offline check, no API: `python evaluate.py --no-llm` parses 14 / 14 tracebacks and finds the known
+  cause line in the collected evidence for 14 / 14 bugs. That tests parsing and retrieval only, not
+  Gemini's diagnosis.
 
 Regression module (`results/regression_eval.txt`, diabetes dataset, 265 / 88 / 89 split):
 scratch OLS and scikit-learn agree (MAE 42.05, RMSE 51.18, R2 0.589), the training-mean baseline

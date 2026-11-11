@@ -1,8 +1,8 @@
 # TraceFix: evidence-checked root-cause suggestions for Python crashes, and linear regression from scratch
 
 *Draft. Every number below comes from a saved result file or a terminal output quoted in the text.
-Anything not yet measured says PENDING; fill those in after the runs listed in section 4.4 and delete
-this paragraph.*
+Anything not measured says NOT RUN. The Gemini runs listed in section 4.4 are optional for the release:
+if they are completed, add them to the tables; if not, the claims below already say what is not supported.*
 
 ## Abstract
 
@@ -10,11 +10,14 @@ TraceFix investigates a failing Python program: it parses the traceback, collect
 language model (Gemini) for the likely cause with the source lines it relied on, checks that those lines
 exist in the evidence, and scores the answer against a known cause. A separate module implements linear
 regression from scratch with NumPy and compares it with scikit-learn. On a benchmark of 14 small bugs,
-retrieving called function bodies removed the false confidence on bug 10 (saved result). A partial run with
-the next evidence step (other-frame code and imported constants) answered bugs 12 and 13 correctly, where the
-earlier prompt had been falsely confident; bug 11, the third such case, is still open. The complete run, the
-plain-chatbot baseline and six fresh bugs are PENDING. The benchmark is tiny and the fixes were designed
-after seeing failures, so the results are evidence about this pipeline on these bugs and nothing more.
+retrieving called function bodies removed the false confidence on bug 10 (saved result), and adding
+other-frame code and imported constants gave 14 / 14 correct behaviour with no false confidence in a
+complete saved run (`after_evidence.json`). That run is repair evidence: the fixes were designed after
+seeing those bugs fail, six of its answers came from earlier cached runs, and the scorer checks cited
+lines, not the explanation. The plain-chatbot baseline (2 of 14 answered) and the six fresh bugs could not
+be run because Gemini's free tier returned overload errors, so no comparison with a plain chatbot is
+claimed. The benchmark is tiny, so the results are evidence about this pipeline on these bugs and nothing
+more.
 
 ## 1. Scope
 
@@ -53,8 +56,8 @@ into a chatbot: the traceback and the whole failing file. Sufficiency is compute
 
 **Runner.** Free-tier Gemini allows about 20 requests a day per model. The runner reuses saved answers,
 paces requests, waits out per-minute limits, backs off on 503/504, stops after 3 failures in a row, and never
-saves an incomplete result (`gemini_quota_notes.md`). It is tested against a fake Gemini server (133 tests)
-and has not yet been run against the real API from the test environment.
+saves an incomplete result (`gemini_quota_notes.md`). It is tested against a fake Gemini server (135 tests)
+and has run against the real API on the author's machine (the 14-bug run in 4.3), but a daily-quota stop has not been seen live.
 
 ## 4. Experiments
 
@@ -97,31 +100,49 @@ Other findings (from earlier experiments, derivations in `derivation.md`):
 Bug 10 was fixed by retrieving called function bodies, bugs 11-13 by adding other-frame code and imported
 constants. **Both fixes were designed after seeing those bugs fail**, so this is repair evidence, not a test.
 
-### 4.3 Current evidence (939f647): partial, not yet a result
+### 4.3 Current evidence: complete run (`results/after_evidence.json`)
 
-A complete run was blocked for days by quota, 503/504 overload and two runner bugs (a 20-second timeout and a
-per-minute 429 read as the daily limit). Terminal output from the partial runs showed 6 of 14 bugs answered, all
-with correct behaviour: bugs 2, 3, 5, 6, 12 and 13. Bug 12's cause was given as `DEFAULT_TAX` being the string
-"0.2", and bug 13's as the key typo `'nam'`, which are the two baseline false-confidence cases that need
-other files. These outputs were not saved to a result file, and bugs 1, 4, 7-11 and 14 had no answer, so
-**this is not a result**. Bug 11 is the case that matters most and is still open.
+| Run | Code | Answered | Correct behaviour | False confidence |
+|---|---|---|---|---|
+| after_evidence | run before the final commit f001548 (file records 881897f, uncommitted changes) | 14 / 14 | 14 / 14 | 0 |
 
-### 4.4 Runs still to do (PENDING)
+The run took 13 requests (8 answered, 5 failed with 503/504 and were retried by the runner); the other 6
+answers were reused from earlier cached runs. The prompt text is locked byte-for-byte by a test, so those
+cached answers are valid for this code, but the 14 answers were not produced by one clean invocation.
+Bug 12's cause was given as `DEFAULT_TAX` being the string "0.2", and bug 13's as the key typo `'nam'`,
+the two baseline false-confidence cases that need other files.
+
+This is **repair evidence, not a test**: bugs 10-13 and their fixes were developed on the same cases.
+The written causes were read from one-line summaries only. Two things still need a human check: bug 10's
+explanation names the symptom more than the silent-`None` design flaw, and bug 4's answer contains doubled
+quotes (`'"5"'`), to be compared with `examples/buggy_shop/run_bug4.py`.
+
+Offline check without any API call (`python evaluate.py --no-llm`): 14 / 14 tracebacks parsed and 14 / 14
+cases have the known cause line inside the collected evidence. This tests parsing and retrieval, not
+Gemini's diagnosis.
+
+### 4.4 Runs not completed
 
 | Run | Command | Result |
 |---|---|---|
-| Complete run, current evidence | `python evaluate.py --save-as results/after_evidence.json` | PENDING |
-| Plain-chatbot baseline | `python evaluate.py --baseline --save-as results/plain_baseline.json` | PENDING |
-| Fresh bugs 15-20 (freeze the code with a git tag first) | `python evaluate.py --cases examples/expected_heldout.json --save-as results/heldout.json` | PENDING |
-| Fresh bugs, plain baseline | `python evaluate.py --baseline --cases examples/expected_heldout.json --save-as results/heldout_plain.json` | PENDING |
+| Complete run, current evidence | `python evaluate.py --save-as results/after_evidence.json` | done, see 4.3 |
+| Plain-chatbot baseline | `python evaluate.py --baseline --save-as results/plain_baseline.json` | PARTIAL: 2 of 14 answered (bugs 1 and 2, both correct); Gemini overload (503/504) blocked the rest; not a result |
+| Fresh bugs 15-20 | `python evaluate.py --cases examples/expected_heldout.json --save-as results/heldout.json` | NOT RUN |
+| Fresh bugs, plain baseline | `python evaluate.py --baseline --cases examples/expected_heldout.json --save-as results/heldout_plain.json` | NOT RUN |
 
-Then `python compare_runs.py results/baseline_bugs11_14.json results/after_evidence.json results/plain_baseline.json`
-gives the table for this section. Read every `likely_cause` before writing any sentence about accuracy.
+Why they are not done: the free tier allows about 20 requests a day per model, and over several days most
+requests were answered with 503/504 overload errors (inferred: failed requests appear to count against the
+daily limit; not confirmed by Google). The runner stops instead of wasting requests and never saves an
+incomplete result.
 
-The fresh bugs: 16-19 have their cause inside the collected evidence; 15 (a mutable default argument) and 20
-(a function that lets a string through) do not, so the correct answer for those two is low confidence. They
-were written with the code frozen but by the author who knew the pipeline, so they are not blind. Bug 19's
-error message differs between Python versions, which is part of the test.
+If they are completed later, `python compare_runs.py results/baseline_bugs11_14.json
+results/after_evidence.json results/plain_baseline.json` gives the comparison table. Read every
+`likely_cause` before writing any sentence about accuracy.
+
+The fresh bugs: 16-19 have their cause inside the collected evidence; 15 (a mutable default argument) and
+20 (a function that lets a string through) do not, so the correct answer for those two is low confidence.
+They were written with the code frozen but by the author who knew the pipeline, so they are not blind.
+Bug 19's error message differs between Python versions, which is part of the test.
 
 ## 5. Engineering lessons
 
@@ -130,7 +151,7 @@ error message differs between Python versions, which is part of the test.
 3. The normal equation squares the condition number and fails on near-collinear features; `lstsq` alone does not
    fix near-duplicates, `rcond` matters.
 4. Passing tests prove only what they exercise. Unit tests, integration tests, benchmark runs and live API calls
-   are different things. Here the new runner has unit and fake-server tests but no real-API run yet.
+   are different things. Here the runner has unit and fake-server tests and one complete real-API run, but a daily-quota stop has not been seen live.
 5. Changing the evidence changes every prompt and invalidates the cache, so each change costs a full re-run.
 6. A milestone needs an implementation, a run and a commit. A partial paste was once misread as a pass.
 7. The fix for bug 10 was not "read every frame": `find_user` is never a traceback frame because it returned.
@@ -157,10 +178,15 @@ Google, so only practice bugs and public code are sent. API keys live in a git-i
 
 ## 8. Conclusion
 
-(Write after the PENDING runs.) What the evidence supports today: called-function retrieval fixed bug 10 (saved
-result); in a partial run that was not saved, the other-frame and constant evidence fixed bugs 12 and 13; bug 11
-is untested; and the regression module reproduces scikit-learn. What it does not support: that TraceFix beats a
-plain chatbot, or that it generalises, until the complete run, the baseline and the fresh bugs are done.
+What the evidence supports: called-function retrieval fixed bug 10 and the other-frame and constant
+evidence fixed bugs 11-13 (saved results, repair evidence); a complete saved run scored 14 / 14 with no
+false confidence by the line-citation measure; the offline pipeline parses all 14 tracebacks and retrieves
+the cause line for all 14; and the regression module reproduces scikit-learn.
+
+What it does not support: that TraceFix beats a plain chatbot (the baseline was not completed), that it
+generalises (the fresh bugs were not run and are not blind), or that its written explanations are correct
+beyond the cited lines (the scorer does not judge them). The tool also has no runtime values, no sandbox and
+no fix verification (see section 6).
 
 ## Appendix A. Reproduce
 
