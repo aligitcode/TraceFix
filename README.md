@@ -25,6 +25,8 @@ written from scratch with NumPy and compared with scikit-learn. The regression m
 
 ## Install (Windows PowerShell)
 
+Requires Python 3.10 or newer.
+
 ```powershell
 cd TraceFix
 python -m venv .venv
@@ -32,7 +34,12 @@ python -m venv .venv
 python -m pip install -e ".[dev]"
 ```
 
-Put your key in a file named `.env` (it is git-ignored; never paste it into a chat or commit it):
+Copy the example settings file, then put your key in the new `.env` (it is git-ignored; never
+paste it into a chat or commit it):
+
+```powershell
+Copy-Item .env.example .env
+```
 
 ```
 GEMINI_API_KEY=your-key-here
@@ -53,6 +60,9 @@ GEMINI_MODEL=gemini-3.8-flash
 | Just some bugs | `python evaluate.py --only 11,12,13` |
 | Read what Gemini wrote | `python show_causes.py` |
 | Compare saved results side by side (Markdown table) | `python compare_runs.py results/baseline_bugs11_14.json results/after_evidence.json` |
+
+`evaluate.py` is the main entry point. `investigate.py` is an older single-script entry point
+that sends only the code around the failing line; it does not collect the extra evidence.
 
 Every answer is saved in `results/cache/` keyed by model and prompt, so **nothing is ever asked
 twice**. If a run stops (daily limit, Google overloaded, Ctrl+C) run the same command later; it
@@ -88,7 +98,7 @@ saved file or a quoted terminal output.
 | `before_definitions.json` (bugs 1-10) | 12fca21, before called-function retrieval | 10 / 10 | 9 / 10 | 1 (bug 10) |
 | `baseline_bugs11_14.json` (bugs 1-14) | 3193912, before frame and constant evidence | 14 / 14 | 11 / 14 | 3 (bugs 11, 12, 13) |
 | `after_evidence.json` (bugs 1-14) | run just before the final commit f001548 (the file records 881897f with uncommitted changes); the prompt is locked by a test | 14 / 14 | 14 / 14 | 0 |
-| Plain-chatbot baseline (`--baseline`) | f001548 | 2 / 14 (bugs 1 and 2) | not a result | not a result |
+| Plain-chatbot baseline (`--baseline`) | f001548 | 3 / 14 (bugs 1, 2 and 10) | not a result | not a result |
 | Fresh bugs 15-20 | f001548 | not run | not run | not run |
 
 How to read this table:
@@ -100,7 +110,7 @@ How to read this table:
   does not judge the written explanation, so read each `likely_cause` yourself
   (`python show_causes.py`).
 - The plain-chatbot baseline could not be completed: over several days Gemini answered most requests
-  with 503/504 overload errors (2 of 14 answered). **No claim is made about TraceFix versus a plain
+  with 503/504 overload errors (3 of 14 answered). **No claim is made about TraceFix versus a plain
   chatbot.** The fresh bugs have not been run either.
 - Offline check, no API: `python evaluate.py --no-llm` parses 14 / 14 tracebacks and finds the known
   cause line in the collected evidence for 14 / 14 bugs. That tests parsing and retrieval only, not
